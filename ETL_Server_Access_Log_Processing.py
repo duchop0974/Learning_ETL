@@ -72,3 +72,41 @@ default_args = {
     'retries': 1,
     'retry_delay': timedelta(minutes=5),
 }
+
+dag = DAG(
+    'ETL_Server_Access_Log_Processing',
+    default_args=default_args,
+    schedule_interval=timedelta(days=1),
+)
+
+download_task = PythonOperator(
+    task_id='download',
+    python_callable=download,
+    dag=dag,
+)
+
+extract_task = PythonOperator(
+    task_id='extract',
+    python_callable=extract,
+    dag=dag,
+)
+
+transform_task = PythonOperator(
+    task_id='transform',
+    python_callable=transform,
+    dag=dag,
+)
+
+load_task = PythonOperator(
+    task_id='load',
+    python_callable=load,
+    dag=dag,
+)
+
+check_task = PythonOperator(
+    task_id='check',
+    python_callable=check,
+    dag=dag,
+)
+
+download_task >> extract_task >> transform_task >> load_task >> check_task
