@@ -2,12 +2,12 @@
 from datetime import timedelta
 from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
-from airflow.untils.dates import dayago
+from airflow.untils.dates import days_ago
 
 #difine DAG arguments
 default_args = {
     'owner': 'duchop',
-    'start_date': dayago(0),
+    'start_date': days_ago(0),
     'email': ['duchop0974@gmail.com'],
     'retries': 1,
     'retry_delay': timedelta(minutes=5)
